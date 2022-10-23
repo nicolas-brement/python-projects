@@ -3,45 +3,75 @@ import random
 
 #Question de lancement du jeu.
 NiveauJoueur = input("Bonjour, à quel niveau souhaite tu jouer. Entre (d)ébutant, (i)ntermédiaire, (e)xpert ou (q) pour quitter:")
-
+tentatives = 7
 #Boucle permettant de sélectionner le niveau de jeu souhaité, le nombre de vie correspondant au niveau choisit sera affiché.
 while NiveauJoueur == "q" :
         print("Vous avez quitté le jeu")
         break
 if NiveauJoueur == "d":
-        NbViesRestantes = 10
-        print(f"Vous avez {NbViesRestantes} vies")
+        tentatives = 10
+        print(f"Vous avez {tentatives} vies")
 elif NiveauJoueur == "i":
-        NbViesRestantes = 7
-        print(f"Vous avez {NbViesRestantes} vies")
+        tentatives = 7
+        print(f"Vous avez {tentatives} vies")
 elif NiveauJoueur == "e" :
-        NbViesRestantes = 4
-        print(f"Vous avez {NbViesRestantes} vies")
+        tentatives = 4
+        print(f"Vous avez {tentatives} vies")
 
         
 #Ouverture du fichier "dico_france.txt" en mode lecture.
 file = open("dico_france.txt", "r", encoding="ISO-8859-1")
 
 #Procéder au tri du fichier me permettant la sélection d'un mot aléatoire.
-content = file.read().split()
-content = random.choice(content)
+solution = file.read().split()
+solution = random.choice(solution)
 
-#J'affiche un message d'erreur lorsque l'utilisateur saisit plus d'une lettre.
-#len me permettra de compter le nombre de lettre qu'il y a dans le mot choisi.
-for guess in range(len(content)-1):
-        devineLettre = str(input("Enter one letter : "))
-        if (len(devineLettre)> 1):
-                print("Vous ne pouvez choisir qu'un seul caractère!")
-                continue
+affichage = ""
+for l in solution:
+  affichage = affichage + "_ "
+lettres_trouvees = ""
+print("Mot à deviner : ", affichage)
 
-        if devineLettre in content:
-                lettreSaisi = lettreSaisi + devineLettre
-                print(f"Bien joué! Cette {lettreSaisi}")
-        else:
-                NbViesRestantes = NbViesRestantes -1
-        
+proposition = input("proposez une lettre : ")
+
+if proposition in solution:
+    lettres_trouvees = lettres_trouvees + proposition
+else:
+    tentatives = tentatives - 1
+
+if proposition in solution:
+    lettres_trouvees = lettres_trouvees + proposition
+    print("-> Bien vu!")
+else:
+    tentatives = tentatives - 1
+    print("-> Non cette lettre ne fait pas partie du mot. Il vous reste", tentatives, "tentatives")
                 
+while tentatives>0:
+    print("Mot à deviner : ", affichage)
+    proposition = input("proposez une lettre : ")
+    if proposition in solution:
+        lettre_trouvees = lettres_trouvees + proposition
+        print("-> Bien vu!")
+    else:
+        tentatives = tentatives - 1
+        print("-> Non cette lettre ne fait pas partie du mot. Il vous reste", tentatives, "tentatives")
+             
         
+        affichage = ""
+    for x in solution:
+      if x in lettres_trouvees:
+        affichage += x + " "
+      else:
+          affichage += "_ "
+        
+        
+
+while "_" not in affichage:
+        print(">>> Gagné! <<<")
+        print("    * Fin de la partie *    ")
+        break
+        
+
 
 
 
